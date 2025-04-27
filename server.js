@@ -1,17 +1,19 @@
 // Import required modules
-const express = require('express');
-const multer = require('multer');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-const dotenv = require('dotenv');
-const { convertPdfPagesToImages, generateQuizQuestions } = require('./index.js');
+import express from 'express';
+import multer from 'multer';
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import { convertPdfPagesToImages, generateQuizQuestions } from './index.js';
 
 // Initialize environment variables
 dotenv.config();
 
-// Use Node's __dirname directly (no need for fileURLToPath in CommonJS)
-const __dirname = __dirname;
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create Express app
 const app = express();
