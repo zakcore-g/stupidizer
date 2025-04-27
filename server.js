@@ -22,7 +22,7 @@ const port = process.env.PORT || 3000;
 // Configure middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/')));
 
 // Configure multer for file uploads
 const upload = multer({
@@ -38,7 +38,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Serve the frontend
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '/', 'index.html'));
 });
 
 // API route for PDF processing
