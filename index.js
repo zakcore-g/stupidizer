@@ -1,24 +1,22 @@
-import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 // Use pdf-poppler
-import pkg from 'pdf-poppler';
+const pkg = require('pdf-poppler');
 const { convert } = pkg;
 
 // Initialize environment variables
 dotenv.config();
 
-// Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Use Node's __dirname directly (no need for fileURLToPath in CommonJS)
+const __dirname = __dirname;
 
 // Initialize Google Generative AI with your API key
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 // Function to convert PDF pages to images
-export async function convertPdfPagesToImages(pdfPath) {
+async function convertPdfPagesToImages(pdfPath) {
   try {
     console.log('Converting PDF pages to images...');
     const outputImages = [];
@@ -73,7 +71,7 @@ export async function convertPdfPagesToImages(pdfPath) {
 }
 
 // Function to generate quiz questions using Gemini model
-export async function generateQuizQuestions(imagePaths = []) {
+async function generateQuizQuestions(imagePaths = []) {
   try {
     // Configure the model
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -152,6 +150,12 @@ async function main() {
 }
 
 // Only run the main function if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   main();
 }
+
+// Export functions for use in other files
+module.exports = {
+  convertPdfPagesToImages,
+  generateQuizQuestions
+};
