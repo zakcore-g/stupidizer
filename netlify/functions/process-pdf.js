@@ -36,25 +36,10 @@ router.post('/', upload.single('pdf'), async (req, res) => {
     const pdfPath = req.file.path;
     console.log('Processing PDF:', pdfPath);
 
-    // Convert PDF to images
-    const images = await convertPdfPagesToImages(pdfPath);
-    console.log(`Converted ${images.length} pages to images`);
+    // Pass the PDF directly to generate quiz questions
+    console.log('Generating quiz questions from PDF...');
+    const quizQuestions = await generateQuizQuestions([pdfPath]);
 
-    if (images.length === 0) {
-      return res.status(500).json({ error: 'Failed to convert PDF to images' });
-    }
-
-    // Generate quiz questions from images
-    console.log('Generating quiz questions from images...');
-    const quizQuestions = await generateQuizQuestions(images);
-
-    // Clean up temporary files
-    images.forEach(imgPath => {
-      if (fs.existsSync(imgPath)) {
-        fs.unlinkSync(imgPath);
-      }
-    });
-    
     // Delete the uploaded PDF
     if (fs.existsSync(pdfPath)) {
       fs.unlinkSync(pdfPath);

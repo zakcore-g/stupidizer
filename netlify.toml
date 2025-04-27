@@ -1,7 +1,10 @@
 [build]
-  command = "npm install"
+  command = "npm install --production"
   publish = "."
   functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/api/process-pdf"
